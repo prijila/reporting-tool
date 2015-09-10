@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+ 	xmlns:f="http://java.sun.com/jsf/core" 
+	template="/pages/templates/commonLayout.xhtml">
+
+	<ui:define name="content">
+	
+	<f:loadBundle basename="com.healthcare.configurator.ui.labels.pageLabels" var="label"/>
+	
+		<h:form id="tableCreationForm">
+			<h:messages styleClass="errorglobal"/>
+			<h3><h:outputLabel value="#{label.tableCreationTitle}"/></h3>
+			<h:panelGrid columns="2">
+				<h:outputLabel value="#{label.tableName}"/>
+				<h:panelGroup>
+				<h:inputText id="tableName" value="#{tableBean.tableMetaData.tableName}" required="#{!empty param['tableCreationForm:saveButton']}" requiredMessage="#{label.tableNameRequiredMessage}">
+					<f:ajax event="change" execute="@this" render="saveButton" listener="#{tableBean.tableNameListener}"/>
+				</h:inputText>
+				<h:message for="tableName" styleClass="errorh"/>
+				</h:panelGroup>
+			</h:panelGrid>
+			
+			<h:panelGroup id="columnPanel">
+			<h:dataTable binding="#{tableBean.columnDataTable}" id="columnList" value="#{tableBean.tableMetaData.columns}" var="column"
+			 styleClass="datatable"  rowClasses="drow,darow">
+				
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.columnName}"/></f:facet>
+					<h:inputText id="columnName" value="#{column.columnName}" required="#{!empty param['tableCreationForm:saveButton']}" requiredMessage="#{label.columnNameRequiredMessage}"/>	
+					<h:message for="columnName" styleClass="errorh"></h:message>
+				</h:column>
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.type}"/></f:facet>
+					<h:selectOneMenu value="#{column.columnDatatype.dataType}">
+						<f:selectItems value="#{commonBean.dataTypes}"/>
+						<f:ajax event="change" execute="@form" render="@form"/>
+					</h:selectOneMenu>
+					<h:panelGroup rendered="#{column.columnDatatype.dataType !=null and column.columnDatatype.dataType.datatypeID == applicationBean.DECIMALDATATYPE.datatypeID}">
+						<h:outputLabel value="#{label.length}"/>
+						<h:inputText value="#{column.columnDatatype.length}" required="#{!empty param['tableCreationForm:saveButton']}" requiredMessage="#{label.lengthRequiredMessage}" />
+						
+						<h:outputLabel value="#{label.precision}"/>
+						<h:inputText value="#{column.columnDatatype.precision}" required="#{!empty param['tableCreationForm:saveButton']}" requiredMessage="#{label.lengthRequiredMessage}" />
+					</h:panelGroup>
+					<h:panelGroup rendered="#{column.columnDatatype.dataType !=null and column.columnDatatype.dataType.datatypeID == applicationBean.NUMBERDATATYPE.datatypeID}">
+						<h:outputLabel value="#{label.length}"/>
+						<h:inputText id="numlength" value="#{column.columnDatatype.length}" required="#{!empty param['tableCreationForm:saveButton']}" requiredMessage="#{label.lengthRequiredMessage}" />
+					</h:panelGroup>
+					<h:panelGroup rendered="#{column.columnDatatype.dataType !=null and column.columnDatatype.dataType.datatypeID == applicationBean.STRINGDATATYPE.datatypeID}">
+						<h:outputLabel value="#{label.length}"/>
+						<h:inputText id="strlength" value="#{column.columnDatatype.length}" required="#{!empty param['tableCreationForm:saveButton']}" requiredMessage="#{label.lengthRequiredMessage}" />
+					</h:panelGroup>
+				</h:column>
+		
+				
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.delete}"/></f:facet>
+					<h:commandButton title="#{label.delete}" action="#{tableBean.deleteColumn}" immediate="true" styleClass="deleteb"/>
+				</h:column>
+			
+			</h:dataTable>
+			</h:panelGroup>
+			<h:commandButton value="#{label.addColumn}" action="#{tableBean.addColumn}" styleClass="buttonb MT5"/>
+			
+			<div class="CL"/>
+			<h:commandButton id="saveButton" action="#{tableBean.saveTable}" value="#{label.saveTable}" disabled="#{tableBean.tableNameExists}" styleClass="buttonb MT5"/>
+			<h:commandButton id="backButton" action="#{dashboardBean.gotoDashBoard}" immediate="true" value="#{label.backButton}" styleClass="buttonb ML5"/>
+		</h:form>
+		
+		
+	</ui:define>
+</ui:composition>

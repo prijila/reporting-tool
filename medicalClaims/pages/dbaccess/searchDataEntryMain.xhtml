@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+ 	xmlns:f="http://java.sun.com/jsf/core" 
+	template="/pages/templates/commonLayout.xhtml">
+
+	<ui:define name="content">
+		<f:loadBundle basename="com.healthcare.configurator.ui.labels.pageLabels" var="label"/>
+		<h:form>
+		<h:panelGroup rendered="#{searchBean.renderSuccessMessage}">
+		<div class="successMsg">
+			<h:outputLabel value="#{searchBean.successMessage}"/>
+		</div>
+		</h:panelGroup>
+			
+			<div class="searchBox">
+				<h:outputLabel value="#{label.insuranceIDPrompt}" styleClass="MA5"/>
+				<h:inputText value="#{searchBean.searchInsuranceIDValue}" styleClass="small MA5"/>
+				<h:commandButton value="#{label.search}" action="#{searchBean.searchInsuranceID}" styleClass="ML5 buttonb"/>
+			</div>
+			
+			<div class="CL"/>
+			<h:panelGroup rendered="#{searchBean.showTable}">
+			<div class="searchPage">
+			<h:panelGroup rendered="#{ searchBean.insuranceDataList != null and !empty searchBean.insuranceDataList}">
+			<h:dataTable value="#{searchBean.insuranceDataList}" var="patient" binding="#{searchBean.dataEntryTable}" 
+				rendered="#{ searchBean.insuranceDataList != null and !empty searchBean.insuranceDataList}"
+				styleClass="datatable" rowClasses="drow,darow" rows="#{searchBean.rowsPerPage}" first="#{searchBean.firstRow}"
+				columnClasses="W10,W10,W15,W15,W15,W15,W7,W7,W5">
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.INSURANCE_ID}"/></f:facet>
+					<h:outputLabel value="#{patient.insuranceID}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.DATE_OF_VISIT}"/></f:facet>
+					<h:outputLabel value="#{patient.dateStringValue}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.PATIENT_NAME}"/></f:facet>
+					<h:outputLabel value="#{patient.patientName}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.COMPANY_NAME}"/></f:facet>
+					<h:outputLabel value="#{patient.companyName}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.PROVIDER}"/></f:facet>
+					<h:outputLabel value="#{patient.providerName}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.MEDICAL_CLAIMS_PURPOSE}"/></f:facet>
+					<h:outputLabel value="#{patient.claimPurposeValue}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.CLAIMED_AMOUNT}"/></f:facet>
+					<h:outputLabel value="#{patient.claimedAmt}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.APPROVED_AMOUNT}"/></f:facet>
+					<h:outputLabel value="#{patient.approvedAmt}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.edit}"/></f:facet>
+					<h:commandButton styleClass="editb" action="#{searchBean.editDataEntry}"/>
+				</h:column>
+			</h:dataTable>
+			
+			<div class="pageLinksPanel">
+			<h:panelGroup>
+				<h:commandButton title="first" action="#{searchBean.pageFirst}"
+                    disabled="#{searchBean.firstRow == 0}" styleClass="firstb MR5"/>
+                <h:commandButton  action="#{searchBean.pagePrevious}" title="previous"
+                    disabled="#{searchBean.firstRow == 0}" styleClass="previousb MR5"/>
+                
+                <ui:repeat var="page" value="#{searchBean.pages}">
+					<h:commandLink value="#{page}" action="#{searchBean.page}"/>
+					<h:outputLabel value="  "/>
+				</ui:repeat>
+                    
+                <h:commandButton action="#{searchBean.pageNext}" title="next"
+                    disabled="#{searchBean.firstRow + searchBean.rowsPerPage >= searchBean.totalRows}" 
+                    styleClass="nextb ML5" />
+                <h:commandButton title="last" action="#{searchBean.pageLast}"
+                    disabled="#{searchBean.firstRow + searchBean.rowsPerPage >= searchBean.totalRows}" 
+                    styleClass="lastb ML5"/>
+			</h:panelGroup>
+			
+			</div>
+			</h:panelGroup>
+			
+			<div class="infoMsg">
+				<h:outputLabel value="#{label.noSearchEntriesMsg}" rendered="#{searchBean.insuranceDataList == null or empty searchBean.insuranceDataList}"/>
+			</div>
+			</div>
+			</h:panelGroup>
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

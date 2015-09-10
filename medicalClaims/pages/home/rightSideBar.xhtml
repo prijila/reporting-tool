@@ -1,0 +1,38 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+ 	xmlns:f="http://java.sun.com/jsf/core" >
+
+	<ui:composition>
+		<h:form>
+		<ul class="nav">
+			<li><h:commandLink value="#{commonLabel.dashboardPrompt}" action="#{dashboardBean.gotoDashBoard}"/></li>
+			<li class="dropdown"><a href="#"><h:outputLabel value="#{commonLabel.settingsPrompt}"/></a>
+				<ul>
+					<li class="sub">
+					<h:commandLink value="#{commonLabel.manualDataEntryPrompt}" action="#{dashboardBean.manualDataEntry}" styleClass="CL"/>
+					</li>
+					<li class="sub">
+					<h:commandLink value="#{commonLabel.dataEntryByFilePrompt}" action="#{dashboardBean.dataEntryByFile}" />
+					</li>
+					<li class="sub">
+					<h:commandLink value="#{commonLabel.dataSearchPrompt}" action="#{dashboardBean.searchdataEntry}" />
+					</li>
+				</ul>
+			</li>
+			<li class="dropdown"><a href="#"><h:outputLabel value="#{commonLabel.generateReportPrompt}"/></a>
+				<ul>
+					<li class="sub"><h:commandLink value="#{commonLabel.datewiseReportPrompt}" action="#{reportBean.datewiseReport}"/></li>
+					<li class="sub"><h:commandLink value="#{commonLabel.patientwiseReportPrompt}" action="#{reportBean.patientwiseReport}"/></li>
+					<li class="sub"><h:commandLink value="#{commonLabel.companywiseReportPrompt}" action="#{reportBean.companywiseReport}"/></li>
+					<li class="sub"><h:commandLink value="#{commonLabel.insuranceIDwiseReportPrompt}" action="#{reportBean.insuranceIDwiseReport}"/></li>
+					<li class="sub"><h:commandLink value="#{commonLabel.providerwiseReportPrompt}" action="#{reportBean.providerwiseReport}"/></li>
+					<li class="sub"><h:commandLink value="#{commonLabel.claimwiseReportPrompt}" action="#{reportBean.claimwiseReport}"/></li>
+					<li class="sub"><h:commandLink value="#{commonLabel.otherReportPrompt}" action="#{reportBean.otherReports}"/></li>
+				</ul>
+			</li>
+			<li><h:commandLink value="#{commonLabel.aboutUsPrompt}" action="aboutus"/></li>
+		</ul>
+		</h:form>
+	</ui:composition>
+</ui:composition>

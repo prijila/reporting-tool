@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+ 	xmlns:f="http://java.sun.com/jsf/core" 
+	template="/pages/templates/commonLayout.xhtml">
+
+	<ui:define name="content">
+		<f:loadBundle basename="com.healthcare.home.ui.labels.pageLabels" var="label"/>
+		<h:form>
+			<h:messages globalOnly="true" styleClass="errorglobal"/>
+			<h:panelGrid columns="2" styleClass="dashboardTable">
+			
+				<h:panelGroup>
+					<h:outputLabel value="#{label.createTablePrompt}"/>
+					<div class="CL"/>
+					<ul>
+					<li>
+						<h:commandLink value="#{label.createTablePrompt}" action="#{dashboardBean.createTable}"/>
+					</li>
+					</ul>
+					 <h:graphicImage  name="images/icon_table.png" styleClass="FR"/>
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:outputLabel value="#{label.addDataPrompt}"/>
+					<div class="CL"/>
+					<ul>
+					<li>
+					<h:commandLink value="#{label.manualDataEntryPrompt}" action="#{dashboardBean.manualDataEntry}" styleClass="CL"/>
+					</li>
+					<li>
+					<h:commandLink value="#{label.dataEntryByFilePrompt}" action="#{dashboardBean.dataEntryByFile}" />
+					</li>
+					</ul>
+					 <h:graphicImage  name="images/icon_dataentry.gif" styleClass="FR"/>
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:outputLabel value="#{label.generateReportPrompt}"/>
+					<div class="CL"/>
+					<ul>
+					<li>
+					<h:commandLink value="#{label.generateReportPrompt}" action="#{dashboardBean.generateReport}"/>
+					</li>
+					</ul>
+					<h:graphicImage  name="images/report2.png" styleClass="FR"/>
+				</h:panelGroup>
+				
+			</h:panelGrid>
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

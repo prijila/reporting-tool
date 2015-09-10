@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+    
+    
+    
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>dashboard</from-outcome>
+			<to-view-id>/pages/home/home.xhtml</to-view-id>
+			<redirect/>		
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>home</from-outcome>
+			<to-view-id>/pages/home/home.xhtml</to-view-id>
+			<redirect/>		
+		</navigation-case>
+	</navigation-rule>
+	
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>manualDataEntry</from-outcome>
+			<to-view-id>/pages/dbaccess/dataEntry.xhtml</to-view-id>		
+			<redirect/>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>dataEntryDetails</from-outcome>
+			<to-view-id>/pages/dbaccess/editDataEntry.xhtml</to-view-id>		
+			<redirect/>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>fileDataEntry</from-outcome>
+			<to-view-id>/pages/dbaccess/dataEntryByFile.xhtml</to-view-id>	
+			<redirect/>	
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>searchDataEntry</from-outcome>
+			<to-view-id>/pages/dbaccess/searchDataEntryMain.xhtml</to-view-id>
+			<redirect/>		
+		</navigation-case>
+	</navigation-rule>
+	
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>createTable</from-outcome>
+			<to-view-id>/pages/dbaccess/tableCreation.xhtml</to-view-id>	
+			<redirect/>	
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>generateReport</from-outcome>
+			<to-view-id>/pages/report/reportGeneration.xhtml</to-view-id>	
+			<redirect/>	
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>report</from-outcome>
+			<to-view-id>/pages/report/report.xhtml</to-view-id>		
+			<redirect/>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/pages/home/home.xhtml</to-view-id>	
+			<redirect/>
+		</navigation-case>
+	</navigation-rule>
+	
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>aboutus</from-outcome>
+			<to-view-id>/pages/home/aboutUs.xhtml</to-view-id>		
+			<redirect/>
+		</navigation-case>
+	</navigation-rule>
+</faces-config>

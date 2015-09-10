@@ -1,0 +1,21 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+ 	xmlns:f="http://java.sun.com/jsf/core" 
+	template="/pages/templates/commonLayout.xhtml">
+
+	<ui:define name="content">
+		
+		<h:form>
+			<ul>
+				<li>
+					<h:commandLink value="#{commonLabel.manualDataEntryPrompt}" action="#{dashboardBean.manualDataEntry}" styleClass="CL"/>
+				</li>
+				<li>
+					<h:commandLink value="#{commonLabel.dataEntryByFilePrompt}" action="#{dashboardBean.dataEntryByFile}" />
+				</li>
+			</ul>		
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

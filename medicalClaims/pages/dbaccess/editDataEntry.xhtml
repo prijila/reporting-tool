@@ -1,0 +1,111 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+ 	xmlns:f="http://java.sun.com/jsf/core" 
+	template="/pages/templates/commonLayout.xhtml">
+
+	<ui:define name="content">
+	
+	<f:loadBundle basename="com.healthcare.configurator.ui.labels.pageLabels" var="label"/>
+		
+		<h:form id="dataEntry">
+		
+		<h:messages globalOnly="true" styleClass="errorglobal"/>
+		
+			<div id="blanket" style="display:none;"></div>
+			<div id="popUpDiv" style="display:none;">
+				<div class="helpHeader">
+					<h:outputLabel value="#{label.helpPrompt}" styleClass="boldText"/>
+					<a href="#" onclick="popup('popUpDiv')"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/close-icon.png" class="FR"/></a>
+				</div>
+				<div class="CL"/>
+				<h:outputText value="#{label.singleDataEntryHelp}" escape="false"/>
+			</div>
+		
+		<div class="contentPage">
+		<h3><h:outputLabel value="#{label.editDataEntryTitle}"/>
+			<div class="helpDiv">
+				<a href="#" onclick="popup('popUpDiv')"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/help-icon.png"/></a>
+			</div>
+		</h3>
+			
+			
+			<div class="MT10"/>
+			
+			<h:panelGroup rendered="#{searchBean.tableMetaDataUI != null and searchBean.tableMetaDataUI.columns != null}">
+			<div class="centerPanel">
+			<h:dataTable value="#{searchBean.tableMetaDataUI.columns}" var="dataColumn" 
+				styleClass="datatable" columnClasses="col,acol" rowClasses="drow,darow">
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.column}"/></f:facet>
+					<h:outputLabel value="#{dataColumn.columnNameString}"/>
+				</h:column>
+				
+				
+				<h:column rendered="false">
+					<f:facet name="header"><h:outputLabel value="#{label.type}"/></f:facet>
+					<h:outputLabel value="#{dataColumn.columnDatatype.dataType.datatypeName}"/>					
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.value}"/></f:facet>
+					<h:panelGroup>
+					<h:inputText value="#{dataColumn.columnValue}" styleClass="companyAutocomplete" rendered="#{dataColumn.companyColumn}"
+						required="#{!empty param['dataEntry:updateButton']}" requiredMessage="#{label.colValueRequiredMessage}"/>
+					<h:inputText value="#{dataColumn.columnValue}" styleClass="providerAutocomplete" rendered="#{dataColumn.providerColumn}"
+						required="#{!empty param['dataEntry:updateButton']}" requiredMessage="#{label.colValueRequiredMessage}"/>
+					<h:inputText id="columnValue" value="#{dataColumn.columnValue}" rendered="#{dataColumn.otherColumn}"
+						required="#{!empty param['dataEntry:updateButton']}" requiredMessage="#{label.colValueRequiredMessage}"/>
+					<h:inputText id="dateColumn" value="#{dataColumn.columnDateValue}" 
+						rendered="#{dataColumn.dateColumn}"
+						styleClass="datepicker" required="#{!empty param['dataEntry:updateButton']}" requiredMessage="#{label.colValueRequiredMessage}">
+						<f:convertDateTime pattern="dd/MM/yyyy"  timeZone="#{applicationBean.timeZone}"  type="date"  dateStyle="short"/>
+					</h:inputText>
+					<h:message for="columnValue" styleClass="errorh"></h:message>
+					<h:message for="dateColumn" styleClass="errorh"></h:message>
+					</h:panelGroup>
+				</h:column>
+			</h:dataTable>
+			</div>
+			<div class="MT5"/>
+			<div class="buttonDiv">
+			<h:commandButton id="updateButton" value="#{label.updateData}" action="#{searchBean.updateDataEntry}" styleClass="button"/>
+			<h:commandButton id="backButton" action="#{searchBean.backFromEdit}" immediate="true" value="#{label.backButton}" styleClass="button ML5"/>
+			</div>
+			</h:panelGroup>
+			
+			</div>
+			
+			<script>
+			$(function() {
+				var availableTags = #{searchBean.companyNames};       
+				 $(".companyAutocomplete").autocomplete({
+				source: availableTags
+				});
+				});
+			</script>
+			
+			<script>
+			$(function() {
+				var availableTags = #{searchBean.providerNames};       
+				 $(".providerAutocomplete").autocomplete({
+				source: availableTags
+				});
+				});
+			</script>
+			
+			<script>
+    		$(function() {
+        		$(".datepicker").datepicker(
+        				{dateFormat: 'dd/mm/yy',
+                            changeMonth: true,
+                            changeYear: true
+                        }
+        		);
+    		});
+    		</script>
+    	
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

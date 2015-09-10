@@ -1,0 +1,182 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+ 	xmlns:f="http://java.sun.com/jsf/core" 
+	template="/pages/templates/commonLayout.xhtml">
+
+	<ui:define name="content">
+		<f:loadBundle basename="com.healthcare.configurator.ui.labels.pageLabels" var="label"/>
+		<h:form id="reportForm">
+		<h:messages globalOnly="true" styleClass="errorglobal"/>
+		
+		<div id="blanket" style="display:none;"></div>
+			<div id="popUpDiv" style="display:none;">
+				<div class="helpHeader">
+					<h:outputLabel value="#{label.helpPrompt}" styleClass="boldText"/>
+					<a href="#" onclick="popup('popUpDiv')"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/close-icon.png" class="FR"/></a>
+				</div>
+				<div class="CL"/>
+				<h:outputText value="#{reportBean.helpContent}" escape="false"/>
+		</div>
+		
+		<div class="contentPage">
+		<h3>
+			<h:outputLabel value="#{label.reportGenerationTitle}"/>
+			<div class="helpDiv">
+				<a href="#" onclick="popup('popUpDiv')"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/help-icon.png"/></a>
+			</div>
+		</h3>
+		
+		
+		<h:panelGroup rendered="#{reportBean.renderTableDetails}">
+		<div class="MT10"/>
+		
+		<div class="centerPanel">
+		<h:panelGroup rendered="#{reportBean.conditionStatement != null}">
+		<h:outputLabel value="#{label.conditionPrompt}"  styleClass="boldText" rendered="false"/>
+		<h:dataTable binding="#{reportBean.conditionTable}" value="#{reportBean.conditionStatement.conditionClauses}" var="clause"
+			styleClass="datatable" columnClasses="W15,W20,W45" rowClasses="drow,darow">
+			<h:column>
+				<f:facet name="header"><h:outputLabel value="#{label.column}"/></f:facet>
+				<h:selectOneMenu value="#{clause.columnName}">
+					<f:selectItems value="#{reportBean.tableMetaData.columns}" var="col" itemLabel="#{col.columnNameString}" itemValue="#{col.columnName}"/>
+					<f:ajax event="change" execute="@form" render="@form" listener="#{reportBean.populateDatatypeListener}"/>
+				</h:selectOneMenu>
+			</h:column>
+			
+			<h:column rendered="false">
+				<f:facet name="header"><h:outputLabel value="#{label.type}"/></f:facet>
+				<h:outputLabel value="#{clause.column.columnDatatype.dataType.datatypeName}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header"><h:outputLabel value="#{label.operator}"/></f:facet>
+				<h:selectOneMenu value="#{clause.conditionElement}">
+					<f:selectItems  value="#{clause.appropriateConditionElementList}"/>
+					<f:ajax event="change" execute="@form" render="@form"/>
+				</h:selectOneMenu>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header"><h:outputLabel value="#{label.value}"/></f:facet>
+				
+				<h:panelGroup rendered="#{clause.column.otherColumn}">
+					<h:inputText value="#{clause.singleValue}"/>
+				</h:panelGroup>
+				<h:inputText value="#{clause.singleValue}" rendered="#{clause.column.companyColumn}" styleClass="companyAutocomplete"/>
+				<h:inputText value="#{clause.singleValue}" rendered="#{clause.column.providerColumn}" styleClass="providerAutocomplete"/>
+				<h:panelGroup rendered="#{clause.column.dateColumn}">
+				<h:inputText value="#{clause.firstDateValue}" styleClass="datepicker">
+					<f:convertDateTime pattern="dd/MM/yyyy"  timeZone="#{applicationBean.timeZone}"  type="date"  dateStyle="short"/>
+				</h:inputText>
+				<h:panelGroup rendered="#{clause.conditionElement == reportBean.BETWEENCONDITION}">
+					<h:outputLabel value="#{label.between}"/>
+					<h:inputText value="#{clause.secondDateValue}" styleClass="datepicker">
+						<f:convertDateTime pattern="dd/MM/yyyy"  timeZone="#{applicationBean.timeZone}"  type="date"  dateStyle="short"/>
+					</h:inputText>
+				</h:panelGroup>
+				</h:panelGroup>
+				
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header"><h:outputLabel value="#{label.deleteCondition}"/></f:facet>
+				<h:commandButton title="#{label.deleteCondition}" action="#{reportBean.deleteCondition}" styleClass="deleteb"/>
+			</h:column>
+			
+			
+		</h:dataTable>
+		
+		<h:commandButton value="#{label.addColumn}" action="#{reportBean.addCondition}" styleClass="buttonb ML10 MT5"/>
+			
+		</h:panelGroup>
+		</div>
+		
+		<div class="columnPanel">
+		<h:panelGroup id="stepThree">
+		<div class="MT10"/>
+		<div class="stepHeader"><h:outputLabel value="#{label.stepThreeDescription}"/></div>
+		<h:dataTable value="#{reportBean.tableMetaData.columns}" var="column" rowClasses="drow,darow" styleClass="datatable" columnClasses="W5,W40">
+			
+			<h:column>
+				<f:facet name="header"><h:outputLabel value="#{label.selectColumnPrompt}"/></f:facet>
+				<h:selectBooleanCheckbox value="#{column.selectedColumn}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header"><h:outputLabel value="#{label.column}"/></f:facet>
+				<h:outputText value="#{column.columnNameString}"/>
+				<div class="CL"/>
+				<h:panelGroup rendered="#{column.columnDatatype.dataType.datatypeID == applicationBean.DATEDATATYPE.datatypeID}">
+					<h:outputLabel value="#{label.dateFormat}" style="font-weight:bold"/>
+						<h:selectOneMenu value="#{column.columnDatatype.dateFormat}">
+							<f:selectItems value="#{commonBean.dateFormatTypes}"/>
+						</h:selectOneMenu>
+					</h:panelGroup>
+			</h:column>
+			
+		</h:dataTable>
+		<h:commandButton type="button" value="#{label.selectAll}" styleClass="buttonb ML10 MT5" action="#{reportBean.selectAllColumns}">
+			<f:ajax event="action" execute="stepThree" render="stepThree"/>
+		</h:commandButton>
+		<h:commandButton type="button" value="#{label.selectNone}" styleClass="buttonb ML10 MT5" action="#{reportBean.selectNoneColumns}">
+			<f:ajax event="action" execute="stepThree" render="stepThree"/>
+		</h:commandButton>
+		</h:panelGroup>
+		</div>
+		
+		<h:panelGroup rendered="false">
+		<div class="MT10"/>
+		<h:outputLabel value="#{label.stepFourDescription}"  styleClass="boldText"/>
+		<h:panelGrid columns="2">
+			
+			<h:outputLabel value="#{label.fileTypePrompt} "/>
+			<h:selectOneMenu value="#{reportBean.reportQuery.fileDetails.fileType}">
+				<f:selectItems value="#{reportBean.fileTypesList}"/>
+			</h:selectOneMenu>
+
+			<h:outputLabel value="#{label.valuesSeparatedBy}"/>
+     		<h:inputText type="text" value="#{reportBean.reportQuery.fileDetails.fileProperties.fieldsTerminatedBy}"/>
+		</h:panelGrid>
+		</h:panelGroup>
+		
+		<div class="MT10"/>
+		<div class="buttonDiv">
+		<h:commandButton  value="#{label.generateReport}" action="#{reportBean.generateReport}" styleClass="button"/>
+		<h:commandButton id="backButton" action="#{dashboardBean.gotoDashBoard}" immediate="true" value="#{label.backButton}" styleClass="button ML5"/>
+		</div>
+		
+		</h:panelGroup>
+		</div>
+		
+			<script>
+			$(function() {
+				var availableTags = #{reportBean.companyNames};       
+				 $(".companyAutocomplete").autocomplete({
+				source: availableTags
+				});
+				});
+			</script>
+			
+			<script>
+			$(function() {
+				var availableTags = #{reportBean.providerNames};       
+				 $(".providerAutocomplete").autocomplete({
+				source: availableTags
+				});
+				});
+			</script>
+		<script>
+    		$(function() {
+        		$(".datepicker").datepicker(
+        				{dateFormat: 'dd/mm/yy',
+                            changeMonth: true,
+                            changeYear: true
+                        }
+        		);
+    		});
+    		</script>
+    		
+		</h:form>
+	</ui:define>
+</ui:composition>

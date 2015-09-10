@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+ 	xmlns:f="http://java.sun.com/jsf/core" 
+	template="/pages/templates/commonLayout.xhtml">
+
+	<ui:define name="content">
+	<f:loadBundle basename="com.healthcare.configurator.ui.labels.pageLabels" var="label"/>
+		<h:panelGroup rendered="#{tableManagerBean.renderErrorMessage}">
+		<div class="errorglobal">
+			<h:outputLabel value="#{tableManagerBean.errorMessage}"/>
+		</div>
+		</h:panelGroup>
+		
+		<h:messages globalOnly="true" styleClass="errorglobal"/>
+		
+		<h:panelGroup rendered="#{tableManagerBean.renderSuccessMessage}">
+		<div class="successMsg">
+			<h:outputLabel value="#{tableManagerBean.successMessage}"/>
+		</div>
+		</h:panelGroup>
+		
+		<div class="contentPage">
+		<h:form id="fileEntryForm">
+		
+		
+		
+		
+		
+			<div id="blanket" style="display:none;"></div>
+			<div id="popUpDiv" style="display:none;">
+				<div class="helpHeader">
+					<h:outputLabel value="#{label.helpPrompt}" styleClass="boldText"/>
+					<a href="#" onclick="popup('popUpDiv')"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/close-icon.png" class="FR"/></a>
+				</div>
+				<div class="CL"/>
+				<h:outputText value="#{label.dataEntryByFileHelp}" escape="false"/>
+			</div>
+		
+		<h3><h:outputLabel value="#{label.fileDataEntryTitle}"/>
+			<div class="helpDiv">
+				<a href="#" onclick="popup('popUpDiv')"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/help-icon.png"/></a>
+			</div>
+		</h3>
+			
+			
+			<div class="MT10"/>
+			<h:panelGroup rendered="#{tableManagerBean.tableMetaDataUI != null and tableManagerBean.tableMetaDataUI.columns != null}">
+			<div class="centerPanel">
+			<h:dataTable value="#{tableManagerBean.tableMetaDataUI.columns}" var="dataColumn"
+				styleClass="datatable" columnClasses="W7,W50" rowClasses="drow,darow">
+				<h:column>
+					<f:facet name="header"><h:outputLabel value="#{label.columnIndexInFile}"/></f:facet>
+					<h:panelGroup>
+					<h:outputLabel id="colIndex" value="#{dataColumn.columnIndex}"/>
+					</h:panelGroup>
+				</h:column>
+				<h:column> 
+					<f:facet name="header"><h:outputLabel value="#{label.column}"/></f:facet>
+					<h:outputLabel value="#{dataColumn.columnNameString}"/>
+					<div class="CL"/>
+					<h:panelGroup rendered="#{dataColumn.columnDatatype.dataType.datatypeID == applicationBean.DATEDATATYPE.datatypeID}">
+						<h:outputLabel value="#{label.dateFormat}" style="font-weight:bold"/>
+						<h:selectOneMenu value="#{dataColumn.columnDatatype.dateFormat}" disabled="#{tableManagerBean.renderFileUpload}">
+							<f:selectItems value="#{commonBean.dateFormatTypes}"/>
+							<f:ajax execute="@this" event="change"/>
+						</h:selectOneMenu>
+					</h:panelGroup>
+				</h:column>
+				<h:column rendered="false">
+					<f:facet name="header"><h:outputLabel value="#{label.value}"/></f:facet>
+					<h:outputLabel value="#{dataColumn.columnDatatype.dataType.datatypeName}"/>
+					<div class="CL"/>
+					<h:panelGroup rendered="#{dataColumn.columnDatatype.dataType.datatypeID == applicationBean.DATEDATATYPE.datatypeID}">
+						<h:outputLabel value="#{label.dateFormat}" style="font-weight:bold"/>
+						<h:selectOneMenu value="#{dataColumn.columnDatatype.dateFormat}" disabled="#{tableManagerBean.renderFileUpload}">
+							<f:selectItems value="#{commonBean.dateFormatTypes}"/>
+							<f:ajax execute="@this" event="change"/>
+						</h:selectOneMenu>
+					</h:panelGroup>
+				</h:column>
+				
+			</h:dataTable>
+			</div>
+			
+			<div class="MT10"/>
+			<div class="buttonDiv">
+			<h:commandButton id="continueButton" value="#{label.continueToUpload}" action="#{tableManagerBean.continueToUpload}" styleClass="button">
+				<f:ajax event="action" execute="@all" render="@all"/>
+			</h:commandButton>
+			<h:commandButton id="backButton" action="#{dashboardBean.gotoDashBoard}" immediate="true" value="#{label.backButton}" styleClass="button ML5"/>
+			</div>
+			</h:panelGroup>
+			<div class="MT10"/>
+		</h:form>
+		<h:panelGroup rendered="#{tableManagerBean.renderFileUpload}">
+		<form action="#{facesContext.externalContext.requestContextPath}/uploadFileServlet" method="post" enctype="multipart/form-data">  
+  			
+     		<h:panelGrid columns="2">
+     			<h:panelGroup rendered="false">
+     			<h:outputLabel value="#{label.valuesSeparatedBy}"/>
+     			<input type="text" name="separator"/>
+     			</h:panelGroup>
+     			
+     			<h:outputLabel value="#{label.fileName}"/>
+  				<input type="file" name="dataEntryFile" size="40"/>
+     		
+     		</h:panelGrid>
+     		<div class="buttonDiv">
+     		<input type="submit" value="Submit" class="button"/>
+     		</div>
+   		</form>  
+   		</h:panelGroup>
+   		</div>
+	</ui:define>
+</ui:composition>

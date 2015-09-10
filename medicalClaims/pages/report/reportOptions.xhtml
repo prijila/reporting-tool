@@ -1,0 +1,20 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+ 	xmlns:f="http://java.sun.com/jsf/core" 
+	template="/pages/templates/commonLayout.xhtml">
+
+	<ui:define name="content">
+		<f:loadBundle basename="com.healthcare.report.ui.labels.pageLabels" var="label"/>
+		<ul>
+			<li><h:commandLink value="#{label.datewiseReportPrompt}" action="#{reportBean.datewiseReport}"/></li>
+			<li><h:commandLink value="#{label.patientwiseReportPrompt}" action="#{reportBean.patientwiseReport}"/></li>
+			<li><h:commandLink value="#{label.companywiseReportPrompt}" action="#{reportBean.companywiseReport}"/></li>
+			<li><h:commandLink value="#{label.insuranceIDwiseReportPrompt}" action="#{reportBean.insuranceIDwiseReport}"/></li>
+			<li><h:commandLink value="#{label.providerwiseReportPrompt}" action="#{reportBean.providerwiseReport}"/></li>
+			<li><h:commandLink value="#{label.claimwiseReportPrompt}" action="#{reportBean.claimwiseReport}"/></li>
+			<li><h:commandLink value="#{label.otherReportPrompt}" action="#{reportBean.otherReports}"/></li>
+		</ul>
+		
+	</ui:define>
+</ui:composition>

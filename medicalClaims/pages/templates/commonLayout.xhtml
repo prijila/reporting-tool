@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+ xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	
+	<script src="#{facesContext.externalContext.requestContextPath}/resources/script/jquery-1.8.2.js" type="text/javascript"/>
+	<script src="#{facesContext.externalContext.requestContextPath}/resources/script/jquery-ui-1.9.1.custom.js" type="text/javascript"/>
+	<script src="#{facesContext.externalContext.requestContextPath}/resources/script/jquery-final.js" type="text/javascript"/>
+	<script src="#{facesContext.externalContext.requestContextPath}/resources/script/csspopup.js" type="text/javascript"/>
+	
+	<h:outputStylesheet library="style" name="style.css"></h:outputStylesheet>  
+	<h:outputStylesheet library="style" name="nav.css"></h:outputStylesheet>   
+    <h:outputStylesheet library="style" name="jquery-final.css"></h:outputStylesheet>    
+	
+	<script>
+    $(function() {
+        $( "#menu" ).menu(
+        	{ position: { 
+        		my: "center",
+        	    at: "center" } }
+        );
+    });
+    </script>
+    
+    
+</h:head>
+
+<h:body>
+	<f:loadBundle basename="com.healthcare.home.ui.labels.pageLabels" var="commonLabel"/>
+	<div id="page">
+
+		<div id="header">
+			<ui:insert name="header">
+				<ui:include src="commonHeader.xhtml" />
+			</ui:insert>
+		</div>
+
+
+		<div>
+			<ui:insert name="rightSidebar">
+	 	  		<ui:include src="/pages/home/rightSideBar.xhtml" />
+	   		</ui:insert>
+		</div>
+		
+		<div id="content">
+			<ui:insert name="content">
+	   		</ui:insert>
+		</div>
+
+		<div id="footer">
+			<ui:insert name="footer">
+				<ui:include src="commonFooter.xhtml" />
+			</ui:insert>
+		</div>
+
+	</div>
+
+</h:body>
+</html>
+
